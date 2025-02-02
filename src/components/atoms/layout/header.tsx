@@ -7,9 +7,7 @@ import { useState } from "react";
 import BrandLogo from "@/components/atoms/brand-logo";
 import HeaderLinkMobile from "@/components/atoms/header-link-mobile";
 import { useTheme } from "@/components/theme-provider";
-import { useGetPlatformStatus } from "@/hooks/networking/content/status";
 import { cn } from "@/lib/utils";
-import { TextEffect } from "../typography/text-effect";
 import { Box } from "./box";
 
 const menuItems = APP_HEADER_MENU;
@@ -17,10 +15,6 @@ const menuItems = APP_HEADER_MENU;
 function Header() {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
-  const { data: status } = useGetPlatformStatus();
-
-  const botStatus = status?.db_connection ? "🟢 Live" : "🔴 Down";
-
 
   const handleCloseSheet = () => setOpen(false);
 
@@ -63,10 +57,10 @@ function Header() {
                 />
               ))}
             </nav>
-            <Box className="absolute flex items-center gap-1 bottom-5 right-5">
+            {/* <Box className="absolute flex items-center gap-1 bottom-5 right-5">
               <TextEffect>Platform Status: </TextEffect>
               {botStatus}
-            </Box>
+            </Box> */}
           </SheetContent>
         </Sheet>
       </Box>

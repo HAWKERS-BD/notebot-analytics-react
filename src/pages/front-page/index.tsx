@@ -1,4 +1,5 @@
 import { Box } from "@/components/atoms/layout";
+import Dashboard from "@/components/organisms/dashboard";
 
 // const NOTES_ICON = "/icons/notes.png";
 // const LAB_REPORTS_ICON = "/icons/lab-report.png";
@@ -71,7 +72,11 @@ import { Box } from "@/components/atoms/layout";
 // ];
 
 function FrontPage() {
-  return <Box className="flex flex-col items-center min-h-screen p-4"></Box>;
+  return (
+    <Box className="flex flex-col items-center min-h-screen p-4">
+      <Dashboard />
+    </Box>
+  );
 }
 
 export default FrontPage;
