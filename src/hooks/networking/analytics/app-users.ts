@@ -18,11 +18,22 @@ type AppUsersResponse = {
   total: number;
   total_pages: number;
   users: AppUser[];
+  search?: string;
 };
 
-const fetchAppUsers = async (): Promise<AppUsersResponse | null> => {
+const fetchAppUsers = async (
+  page: number = 1,
+  limit: number = 25,
+  search: string = ""
+): Promise<AppUsersResponse | null> => {
   try {
-    const response = await axios.get(API_CONFIG.APP_USERS);
+    const response = await axios.get(API_CONFIG.APP_USERS, {
+      params: {
+        page,
+        limit,
+        search,
+      },
+    });
     return response?.data ?? null;
   } catch (error) {
     console.error("Error fetching app users:", error);
@@ -32,9 +43,13 @@ const fetchAppUsers = async (): Promise<AppUsersResponse | null> => {
   }
 };
 
-export const useGetAppUsers = () => {
+export const useGetAppUsers = (
+  page: number = 1,
+  limit: number = 25,
+  search: string = ""
+) => {
   return useQuery<AppUsersResponse | null, Error>({
-    queryKey: ["app-users"],
-    queryFn: () => fetchAppUsers(),
+    queryKey: ["app-users", page, limit, search],
+    queryFn: () => fetchAppUsers(page, limit, search),
   });
 };

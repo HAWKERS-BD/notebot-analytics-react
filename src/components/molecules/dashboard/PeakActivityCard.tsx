@@ -23,18 +23,22 @@ export function PeakActivityCard({
       </CardHeader>
       <CardContent className="space-y-2">
         <Box className="flex flex-col space-y-1">
-          <Box className="flex items-center gap-2">
-            <ArrowUp className="w-4 h-4 text-green-500" />
-            <Box className="text-sm text-muted-foreground">Highest:</Box>
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <ArrowUp className="w-4 h-4 text-green-500" />
+              <Box className="text-sm text-muted-foreground">Highest:</Box>
+            </Box>
+            <Box className="font-semibold">{formatDate(highestDate)}</Box>
           </Box>
-          <Box className="ml-6 font-semibold">{formatDate(highestDate)}</Box>
         </Box>
         <Box className="flex flex-col space-y-1">
-          <Box className="flex items-center gap-2">
-            <ArrowDown className="w-4 h-4 text-red-500" />
-            <Box className="text-sm text-muted-foreground">Lowest:</Box>
+          <Box className="flex items-center justify-between">
+            <Box className="flex items-center gap-2">
+              <ArrowDown className="w-4 h-4 text-red-500" />
+              <Box className="text-sm text-muted-foreground">Lowest:</Box>
+            </Box>
+            <Box className="font-semibold">{formatDate(lowestDate)}</Box>
           </Box>
-          <Box className="ml-6 font-semibold">{formatDate(lowestDate)}</Box>
         </Box>
       </CardContent>
     </Card>

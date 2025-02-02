@@ -1,39 +1,26 @@
 import { Box } from "@/components/atoms/layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetDailyReport } from "@/hooks/networking/analytics/daily-report";
 import { useGetDailySummary } from "@/hooks/networking/analytics/daily-report-summary";
+import { useGetGameScores } from "@/hooks/networking/analytics/game-scores";
 import { useGetPlatformStatus } from "@/hooks/networking/content/status";
 import dayjs from "dayjs";
-import { AlertCircle, ExternalLink, RefreshCcw } from "lucide-react";
+import { AlertCircle, RefreshCcw } from "lucide-react";
 import { useMemo, useState } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { Title } from "../atoms/typography/title";
+import { AppUsersCard } from "../molecules/dashboard/AppUsersCard";
+import { DistributionChart } from "../molecules/dashboard/DistributionChart";
+import { GameScoresCard } from "../molecules/dashboard/GameScoresCard";
 import { PeakActivityCard } from "../molecules/dashboard/PeakActivityCard";
 import { PlatformPeaksCard } from "../molecules/dashboard/PlatformPeaksCard";
 import { PlatformStatusCard } from "../molecules/dashboard/PlatformStatusCard";
 import { PlatformUsageCard } from "../molecules/dashboard/PlatformUsageCard";
+import { TimelineChart } from "../molecules/dashboard/TimelineChart";
+import { TodayChart } from "../molecules/dashboard/TodayChart";
+import { TopContentCards } from "../molecules/dashboard/TopContentCards";
 
 function ChartsSkeleton() {
   return (
@@ -41,10 +28,9 @@ function ChartsSkeleton() {
       <Skeleton className="h-10 w-[300px]" />
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-          <Skeleton className="h-5 w-[150px]" />
+          <Skeleton className="h-5 size-[30px]" />
           <Box className="flex gap-2">
             <Skeleton className="h-9 w-[180px]" />
-            <Skeleton className="h-9 w-[140px]" />
           </Box>
         </CardHeader>
         <CardContent>
@@ -57,15 +43,18 @@ function ChartsSkeleton() {
 
 function SummaryCardsSkeleton() {
   return (
-    <Box className="grid grid-cols-1 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <Box className="grid max-w-full grid-cols-1 gap-2 xs:grid-cols-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
       {[1, 2, 3, 4].map(i => (
-        <Card key={i} className="relative">
-          <CardHeader>
-            <Skeleton className="h-5 w-[140px]" />
+        <Card
+          key={i}
+          className="relative min-w-[240px] xs:min-w-[200px] xs:max-w-[200px]"
+        >
+          <CardHeader className="p-3 xs:p-4">
+            <Skeleton className="h-5 w-[120px] xs:w-[100px] max-w-[100px]" />
           </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="h-4 w-[120px]" />
-            <Skeleton className="h-4 w-[100px]" />
+          <CardContent className="p-3 space-y-2 xs:p-4">
+            <Skeleton className="h-4 w-[100px] xs:w-[100px] max-w-[100px]" />
+            <Skeleton className="h-4 w-[80px] xs:w-[100px] max-w-[100px]" />
           </CardContent>
         </Card>
       ))}
@@ -88,6 +77,8 @@ export default function Dashboard() {
     isRefetching: isRefetchingDailySummary,
   } = useGetDailySummary();
   const { data: status, isLoading: isLoadingStatus } = useGetPlatformStatus();
+  const { data: gameScores, isLoading: isLoadingGameScores } =
+    useGetGameScores();
 
   const analyticsStatus = status?.analytics?.db_connection
     ? "🟢 Live"
@@ -158,7 +149,7 @@ export default function Dashboard() {
     );
 
   return (
-    <Box className="p-4 space-y-4">
+    <Box className="w-full max-w-screen-xl p-4 space-y-4">
       <Box className="flex items-center justify-between">
         <Title className="text-2xl font-bold">Analytics Dashboard</Title>
         <Button
@@ -184,13 +175,13 @@ export default function Dashboard() {
             lowestDate={dailySummary?.kpi.lowestApiCountDate ?? ""}
             formatDate={formatDate}
           />
-          <Box className="relative">
-            <PlatformPeaksCard
-              highestAppCount={dailySummary?.kpi.highestAppPlatformCount ?? 0}
-              highestBotCount={dailySummary?.kpi.highestBotPlatformCount ?? 0}
-              formatNumber={formatNumber}
-            />
-          </Box>
+
+          <PlatformPeaksCard
+            highestAppCount={dailySummary?.kpi.highestAppPlatformCount ?? 0}
+            highestBotCount={dailySummary?.kpi.highestBotPlatformCount ?? 0}
+            formatNumber={formatNumber}
+          />
+
           <PlatformUsageCard
             totalAppCount={dailySummary?.kpi.totalAppPlatformCount ?? 0}
             totalBotCount={dailySummary?.kpi.totalBotPlatformCount ?? 0}
@@ -204,245 +195,52 @@ export default function Dashboard() {
       ) : (
         <Tabs defaultValue="timeline" className="w-full">
           <TabsList>
+            {/* <TabsTrigger value="today">Today</TabsTrigger> */}
             <TabsTrigger value="timeline">Timeline</TabsTrigger>
-            <TabsTrigger value="today">Today</TabsTrigger>
             <TabsTrigger value="distribution">Distribution</TabsTrigger>
           </TabsList>
 
           <TabsContent value="timeline">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => refetchDailyReport()}
-                    className="gap-2"
-                  >
-                    <RefreshCcw className="w-4 h-4" />
-                  </Button>
-
-                  <Box className="flex items-center gap-2">
-                    <Select value={timeRange} onValueChange={setTimeRange}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select time range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="7days">Last 7 Days</SelectItem>
-                        <SelectItem value="30days">Last 30 Days</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      asChild
-                      variant="default"
-                      size="sm"
-                      className="gap-2"
-                    >
-                      <a
-                        href="https://lookerstudio.google.com/u/0/reporting/c6301162-7c93-42b3-a630-a7404eab6b4e/page/3RR3D"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Show Full Report
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </Box>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Box className="h-[400px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={filteredChartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="date"
-                        tick={{ fontSize: 12 }}
-                        tickFormatter={date => dayjs(date).format("D MMM,YY")}
-                        angle={-45}
-                        textAnchor="end"
-                      />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend
-                        payload={[
-                          {
-                            value: "App",
-                            type: "rect",
-                            color: "#3b82f6",
-                          },
-                          {
-                            value: "Bot",
-                            type: "rect",
-                            color: "#10b981",
-                          },
-                        ]}
-                      />
-                      <Bar
-                        dataKey="count"
-                        name="Interactions"
-                        label={
-                          timeRange === "7days"
-                            ? {
-                                position: "top",
-                                formatter: (value: number) =>
-                                  value.toLocaleString(),
-                              }
-                            : false
-                        }
-                      >
-                        {filteredChartData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={
-                              entry.platform === "app" ? "#3b82f6" : "#10b981"
-                            }
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Box>
-                {timeRange === "all" && (
-                  <Box className="mt-4 text-center">
-                    <a
-                      href="https://lookerstudio.google.com/u/0/reporting/c6301162-7c93-42b3-a630-a7404eab6b4e/page/3RR3D"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
-                    >
-                      View Full Report
-                    </a>
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
+            <Box className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-4">
+              <TimelineChart
+                filteredChartData={filteredChartData}
+                timeRange={timeRange}
+                setTimeRange={setTimeRange}
+                refetchDailyReport={refetchDailyReport}
+              />
+              <TodayChart
+                selectedDayData={selectedDayData}
+                selectedDay={selectedDay}
+                setSelectedDay={setSelectedDay}
+                refetchDailyReport={refetchDailyReport}
+              />
+            </Box>
           </TabsContent>
 
-          <TabsContent value="today">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between gap-2">
-                  <Box className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => refetchDailyReport()}
-                      className="gap-2"
-                    >
-                      <RefreshCcw className="w-4 h-4" />
-                    </Button>
-                  </Box>
-                  <Select value={selectedDay} onValueChange={setSelectedDay}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select day" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="today">Today</SelectItem>
-                      <SelectItem value="yesterday">Yesterday</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedDayData.length > 0 ? (
-                  <Box className="h-[400px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={selectedDayData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          label={({ platform, count }) =>
-                            `${platform}: ${count.toLocaleString()}`
-                          }
-                          outerRadius={150}
-                          fill="#8884d8"
-                          dataKey="count"
-                          nameKey="platform"
-                        >
-                          {selectedDayData.map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={
-                                entry.platform === "app" ? "#3b82f6" : "#10b981"
-                              }
-                            />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={value => value.toLocaleString()} />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </Box>
-                ) : (
-                  <Box className="h-[400px] w-full flex items-center justify-center text-muted-foreground">
-                    No data available for {selectedDay}
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="platforms">
-            <Card>
-              <CardHeader>
-                <CardTitle>Platform Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Box className="h-[400px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={pieChartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="value" fill="#3b82f6" name="Interactions" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Box>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {/* <TabsContent value="today">
+            <TodayChart
+              selectedDayData={selectedDayData}
+              selectedDay={selectedDay}
+              setSelectedDay={setSelectedDay}
+              refetchDailyReport={refetchDailyReport}
+            />
+          </TabsContent> */}
 
           <TabsContent value="distribution">
-            <Card>
-              <CardHeader>
-                <CardTitle>Platform Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Box className="h-[400px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieChartData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, value }) => `${name}: ${value}%`}
-                        outerRadius={150}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {pieChartData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </Box>
-              </CardContent>
-            </Card>
+            <DistributionChart pieChartData={pieChartData} COLORS={COLORS} />
           </TabsContent>
         </Tabs>
       )}
+
+      <AppUsersCard />
+
+      <Box className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <TopContentCards />
+        <GameScoresCard
+          scores={gameScores?.hof ?? []}
+          isLoading={isLoadingGameScores}
+        />
+      </Box>
     </Box>
   );
 }

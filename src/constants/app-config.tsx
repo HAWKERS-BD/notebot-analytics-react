@@ -1,4 +1,4 @@
-import {  Bug, House, Puzzle, Trophy, Users } from "lucide-react";
+import { House, Puzzle, Trophy, Users } from "lucide-react";
 
 export const APP_CONFIG = {
   name: "NoteBot Analytics",
@@ -35,15 +35,15 @@ export const APP_HEADER_MENU = [
     href: "/missed-words",
   },
   {
-    id: 2121,
+    id: 12323,
     icon: <Trophy size={20} strokeWidth={1.5} />,
     label: "Game Score",
     href: "/game-score",
   },
-  {
-    id: 21212,
-    icon: <Bug size={20} strokeWidth={1.5} />,
-    label: "Error Logs",
-    href: "/error-logs",
-  },
+  // {
+  //   id: 21212,
+  //   icon: <Bug size={20} strokeWidth={1.5} />,
+  //   label: "Error Logs",
+  //   href: "/error-logs",
+  // },
 ];

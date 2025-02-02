@@ -14,12 +14,23 @@ type MissedWordsResponse = {
     limit: number;
     total: number;
     total_pages: number;
+    search: string;
   };
 };
 
-const fetchMissedWords = async (): Promise<MissedWordsResponse | null> => {
+const fetchMissedWords = async (
+  page: number = 1,
+  limit: number = 500,
+  search: string = ""
+): Promise<MissedWordsResponse | null> => {
   try {
-    const response = await axios.get(API_CONFIG.MISSED_WORDS);
+    const response = await axios.get(API_CONFIG.MISSED_WORDS, {
+      params: {
+        page,
+        limit,
+        search,
+      },
+    });
     return response?.data ?? null;
   } catch (error) {
     console.error("Error fetching missed words:", error);
@@ -29,9 +40,13 @@ const fetchMissedWords = async (): Promise<MissedWordsResponse | null> => {
   }
 };
 
-export const useGetMissedWords = () => {
+export const useGetMissedWords = (
+  page: number = 1,
+  limit: number = 500,
+  search: string = ""
+) => {
   return useQuery<MissedWordsResponse | null, Error>({
-    queryKey: ["missed-words"],
-    queryFn: () => fetchMissedWords(),
+    queryKey: ["missed-words", page, limit, search],
+    queryFn: () => fetchMissedWords(page, limit, search),
   });
 };

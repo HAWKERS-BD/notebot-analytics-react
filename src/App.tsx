@@ -1,21 +1,24 @@
 import { Box } from "@/components/atoms/layout";
 import Footer from "@/components/atoms/layout/footer";
 import Header from "@/components/atoms/layout/header";
-import { Spinner } from "@/components/atoms/spinner/spinner";
-import AboutPage from "@/pages/about";
 import FrontPage from "@/pages/front-page";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 
 // Lazy load the QBankPage
+const UsersPage = lazy(() => import("@/pages/users"));
+const MissedWordsPage = lazy(() => import("@/pages/missed-words"));
+const GameScorePage = lazy(() => import("@/pages/game-score"));
 
 // Create a client
 const queryClient = new QueryClient();
 
 import { ThemeProvider } from "@/components/theme-provider";
+import TableSkeleton from "./components/atoms/skeletons/table-skeleton";
 
 function App() {
   return (
@@ -24,14 +27,36 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <Header />
           <Box className="min-h-[calc(100vh-100px)]">
-            <Suspense fallback={<Spinner className={`text-[#377fcc]`} />}>
-              <Routes>
-                <Route path="/" element={<FrontPage />} />
-                <Route path="/about" element={<AboutPage />} />
-              </Routes>
-            </Suspense>
+            <Routes>
+              <Route path="/" element={<FrontPage />} />
+              <Route
+                path="/users"
+                element={
+                  <Suspense fallback={<TableSkeleton />}>
+                    <UsersPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/missed-words"
+                element={
+                  <Suspense fallback={<TableSkeleton />}>
+                    <MissedWordsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/game-score"
+                element={
+                  <Suspense fallback={<TableSkeleton />}>
+                    <GameScorePage />
+                  </Suspense>
+                }
+              />
+            </Routes>
           </Box>
           <Footer />
+          <Toaster />
         </QueryClientProvider>
       </BrowserRouter>
     </ThemeProvider>
