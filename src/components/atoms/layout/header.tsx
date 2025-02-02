@@ -19,7 +19,8 @@ function Header() {
   const [open, setOpen] = useState(false);
   const { data: status } = useGetPlatformStatus();
 
-  const botStatus = status?.botStatus ? "🟢 Live" : "🔴 Down";
+  const botStatus = status?.db_connection ? "🟢 Live" : "🔴 Down";
+
 
   const handleCloseSheet = () => setOpen(false);
 

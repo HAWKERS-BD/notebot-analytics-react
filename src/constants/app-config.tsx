@@ -1,7 +1,7 @@
-import { Code2, House } from "lucide-react";
+import {  Bug, House, Puzzle, Trophy, Users } from "lucide-react";
 
 export const APP_CONFIG = {
-  name: "Triptex Vite React Boilerplate",
+  name: "NoteBot Analytics",
   logoIcon: "/txb.png",
   colorPrimary: "#377fcc",
   colorSecondary: "#000000",
@@ -23,10 +23,27 @@ export const APP_HEADER_MENU = [
     href: "/",
   },
   {
-    id: 2434,
-    icon: <Code2 size={20} strokeWidth={1.5} />,
-    label: "Github",
-    href: "https://github.com/TriptoAfsin/triptex-vite-react-boilerplate",
-    isExternal: true,
+    id: 122,
+    icon: <Users size={20} strokeWidth={1.5} />,
+    label: "Users",
+    href: "/users",
+  },
+  {
+    id: 2121,
+    icon: <Puzzle size={20} strokeWidth={1.5} />,
+    label: "Missed Words",
+    href: "/missed-words",
+  },
+  {
+    id: 2121,
+    icon: <Trophy size={20} strokeWidth={1.5} />,
+    label: "Game Score",
+    href: "/game-score",
+  },
+  {
+    id: 21212,
+    icon: <Bug size={20} strokeWidth={1.5} />,
+    label: "Error Logs",
+    href: "/error-logs",
   },
 ];

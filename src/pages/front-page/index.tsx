@@ -1,7 +1,4 @@
-import BrandLogo from "@/components/atoms/brand-logo";
 import { Box } from "@/components/atoms/layout";
-import { TextEffect } from "@/components/atoms/typography/text-effect";
-import AnimatingContainer from "@/components/Layout/AnimatingContainer";
 
 // const NOTES_ICON = "/icons/notes.png";
 // const LAB_REPORTS_ICON = "/icons/lab-report.png";
@@ -74,34 +71,7 @@ import AnimatingContainer from "@/components/Layout/AnimatingContainer";
 // ];
 
 function FrontPage() {
-  return (
-    <Box className="flex flex-col items-center min-h-screen p-4">
-      <AnimatingContainer animation="zoomIn" duration={0.8}>
-        <BrandLogo className="w-24 h-24 my-10" />
-      </AnimatingContainer>
-      <TextEffect className="text-xl font-semibold">
-        Triptex Vite React Boilerplate
-      </TextEffect>
-      {/* <AnimatingContainer animation="slideDown">
-        <Grid
-          columns="3"
-          className="w-full grid-cols-3 gap-4 my-6 md:grid-cols-4 lg:grid-cols-6"
-        >
-          {FRONT_PAGE_ITEMS.map(item => (
-            <IconLinkButton
-              key={item.id}
-              path={item.href}
-              label={item.title}
-              icon={item?.icon}
-              labelClassName="font-semibold"
-              iconClassName="w-14 h-14"
-              isExternal={item?.isExternal}
-            />
-          ))}
-        </Grid>
-      </AnimatingContainer> */}
-    </Box>
-  );
+  return <Box className="flex flex-col items-center min-h-screen p-4"></Box>;
 }
 
 export default FrontPage;
