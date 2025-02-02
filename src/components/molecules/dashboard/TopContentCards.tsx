@@ -37,7 +37,7 @@ export function TopContentCards() {
     <Box className="grid grid-cols-1 gap-2 sm:gap-4 md:grid-cols-2">
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold">Top Notes</h3>
+          <h3 className="text-lg font-semibold">📗 Top Notes</h3>
         </CardHeader>
         <CardContent className="space-y-2">
           {topNotes?.topNoteSubjects.map(note => (
@@ -53,7 +53,7 @@ export function TopContentCards() {
 
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold">Top Labs</h3>
+          <h3 className="text-lg font-semibold">📄 Top Labs</h3>
         </CardHeader>
         <CardContent className="space-y-2">
           {topLabs?.topLabSubjects.map(lab => (

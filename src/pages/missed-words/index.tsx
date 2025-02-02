@@ -3,7 +3,6 @@ import { Title } from "@/components/atoms/typography/title";
 import { DataTable } from "@/components/organisms/data-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMissedWords } from "@/hooks/networking/analytics/missed-words";
 import { ColumnDef } from "@tanstack/react-table";
 import { AlertCircle, Copy, RotateCw } from "lucide-react";
@@ -63,20 +62,20 @@ export default function MissedWords() {
     },
   ];
 
-  if (isLoading || isRefetching) {
-    return (
-      <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
-        <Card className="w-full max-w-screen-xl">
-          <CardHeader>
-            <Skeleton className="h-8 w-[200px]" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[300px] w-full" />
-          </CardContent>
-        </Card>
-      </Box>
-    );
-  }
+  //   if (isLoading || isRefetching) {
+  //     return (
+  //       <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
+  //         <Card className="w-full max-w-screen-xl">
+  //           <CardHeader>
+  //             <Skeleton className="h-8 w-[200px]" />
+  //           </CardHeader>
+  //           <CardContent>
+  //             <Skeleton className="h-[300px] w-full" />
+  //           </CardContent>
+  //         </Card>
+  //       </Box>
+  //     );
+  //   }
 
   return (
     <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
@@ -103,7 +102,8 @@ export default function MissedWords() {
             onSearch={search => setSearch(search)}
             totalPages={data?.pagination.total_pages}
             currentPage={data?.pagination.current_page}
-            searchColumn="missed words"
+            searchColumn="missed_words"
+            isLoading={isLoading || isRefetching}
           />
         </CardContent>
       </Card>

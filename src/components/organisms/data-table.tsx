@@ -41,6 +41,7 @@ interface DataTableProps<TData, TValue> {
   onSearch?: (search: string) => void;
   totalPages?: number;
   currentPage?: number;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -55,6 +56,7 @@ export function DataTable<TData, TValue>({
   onSearch,
   totalPages,
   currentPage,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -145,7 +147,7 @@ export function DataTable<TData, TValue>({
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute px-2 rounded-full right-[84px] top-1 hover:bg-red-500 size-7"
+                className="absolute p-1 rounded-full right-[90px] top-2 hover:bg-red-500 size-5"
                 onClick={() => handleSearch("")}
               >
                 <XIcon className="w-6 h-6" />
@@ -175,7 +177,19 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              Array.from({ length: table.getState().pagination.pageSize }).map(
+                (_, idx) => (
+                  <TableRow key={`loading-${idx}`}>
+                    {columns.map((_, cellIdx) => (
+                      <TableCell key={`loading-cell-${cellIdx}`}>
+                        <Box className="w-full h-6 bg-gray-200 rounded animate-pulse dark:bg-gray-700" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )
+              )
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
@@ -207,10 +221,10 @@ export function DataTable<TData, TValue>({
         </Table>
       </Box>
       {showPagination && (
-        <Box className="flex items-center justify-between py-4">
+        <Box className="flex flex-col items-center gap-4 py-4 sm:flex-row">
           {showRowsPerPage && (
             <Box className="flex items-center space-x-2">
-              <p className="text-sm font-medium"> Items per page</p>
+              <p className="text-sm font-medium">Items per page</p>
               <Select
                 value={table.getState().pagination.pageSize.toString()}
                 onValueChange={handlePageSizeChange}
@@ -228,11 +242,7 @@ export function DataTable<TData, TValue>({
               </Select>
             </Box>
           )}
-          <Box
-            className={`flex items-center space-x-2 ${
-              !showRowsPerPage ? "ml-auto" : ""
-            }`}
-          >
+          <Box className="flex items-center space-x-2 sm:ml-auto">
             <Button
               variant="outline"
               size="sm"
@@ -242,7 +252,7 @@ export function DataTable<TData, TValue>({
               Previous
             </Button>
             <Box className="flex items-center gap-1">
-              {Array.from({ length: Math.min(5, totalPages || 0) }).map(
+              {Array.from({ length: Math.min(3, totalPages || 0) }).map(
                 (_, idx) => (
                   <Button
                     key={idx}
@@ -254,8 +264,8 @@ export function DataTable<TData, TValue>({
                   </Button>
                 )
               )}
-              {totalPages! > 5 && <span className="px-2">...</span>}
-              {totalPages! > 5 && (
+              {totalPages! > 3 && <span className="px-2">...</span>}
+              {totalPages! > 3 && (
                 <Button
                   variant="outline"
                   size="sm"

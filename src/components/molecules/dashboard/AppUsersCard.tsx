@@ -9,12 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ColumnDef } from "@tanstack/react-table";
-import { Copy, Edit, RotateCw } from "lucide-react";
+import { Copy, Eye, RotateCw } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 export function AppUsersCard() {
-  const { data, isLoading, refetch, isRefetching } = useGetAppUsers(1, 5);
+  const { data, isLoading, refetch, isRefetching } = useGetAppUsers(1, 8);
 
   const columns: ColumnDef<Record<string, any>>[] = [
     {
@@ -108,7 +108,7 @@ export function AppUsersCard() {
           </Button>
           <Link to="/users">
             <Button variant="outline" size="sm">
-              <Edit className="w-4 h-4" />
+              <Eye className="w-4 h-4" />
             </Button>
           </Link>
         </div>

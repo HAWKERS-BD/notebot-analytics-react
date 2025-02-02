@@ -3,7 +3,6 @@ import { Title } from "@/components/atoms/typography/title";
 import { DataTable } from "@/components/organisms/data-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGetGameScores } from "@/hooks/networking/analytics/game-scores";
 import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
@@ -115,20 +114,20 @@ export default function GameScore() {
     },
   ];
 
-  if (isLoading || isRefetching) {
-    return (
-      <Box className="flex flex-col items-center min-h-screen p-6 space-y-4 ">
-        <Card className="w-full max-w-screen-xl">
-          <CardHeader>
-            <Skeleton className="h-8 w-[200px]" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[300px] w-full" />
-          </CardContent>
-        </Card>
-      </Box>
-    );
-  }
+  //   if (isLoading || isRefetching) {
+  //     return (
+  //       <Box className="flex flex-col items-center min-h-screen p-6 space-y-4 ">
+  //         <Card className="w-full max-w-screen-xl">
+  //           <CardHeader>
+  //             <Skeleton className="h-8 w-[200px]" />
+  //           </CardHeader>
+  //           <CardContent>
+  //             <Skeleton className="h-[300px] w-full" />
+  //           </CardContent>
+  //         </Card>
+  //       </Box>
+  //     );
+  //   }
 
   return (
     <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
@@ -155,6 +154,7 @@ export default function GameScore() {
             onSearch={search => setSearch(search)}
             totalPages={data?.total_pages}
             currentPage={data?.current_page}
+            isLoading={isLoading || isRefetching}
           />
         </CardContent>
       </Card>

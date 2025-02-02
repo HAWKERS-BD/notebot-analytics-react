@@ -17,46 +17,51 @@ const GameScorePage = lazy(() => import("@/pages/game-score"));
 // Create a client
 const queryClient = new QueryClient();
 
+import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import TableSkeleton from "./components/atoms/skeletons/table-skeleton";
+import SecretPassPage from "./pages/secret-pass";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <Header />
-          <Box className="min-h-[calc(100vh-100px)]">
-            <Routes>
-              <Route path="/" element={<FrontPage />} />
-              <Route
-                path="/users"
-                element={
-                  <Suspense fallback={<TableSkeleton />}>
-                    <UsersPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/missed-words"
-                element={
-                  <Suspense fallback={<TableSkeleton />}>
-                    <MissedWordsPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/game-score"
-                element={
-                  <Suspense fallback={<TableSkeleton />}>
-                    <GameScorePage />
-                  </Suspense>
-                }
-              />
-            </Routes>
-          </Box>
-          <Footer />
-          <Toaster />
+          <AuthProvider>
+            <Header />
+            <Box className="min-h-[calc(100vh-100px)]">
+              <Routes>
+                <Route path="/secret-pass" element={<SecretPassPage />} />
+                <Route path="/" element={<FrontPage />} />
+                <Route
+                  path="/users"
+                  element={
+                    <Suspense fallback={<TableSkeleton />}>
+                      <UsersPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/missed-words"
+                  element={
+                    <Suspense fallback={<TableSkeleton />}>
+                      <MissedWordsPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/game-score"
+                  element={
+                    <Suspense fallback={<TableSkeleton />}>
+                      <GameScorePage />
+                    </Suspense>
+                  }
+                />
+              </Routes>
+            </Box>
+            <Footer />
+            <Toaster />
+          </AuthProvider>
         </QueryClientProvider>
       </BrowserRouter>
     </ThemeProvider>

@@ -4,7 +4,6 @@ import { DataTable } from "@/components/organisms/data-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGetAppUsers } from "@/hooks/networking/analytics/app-users";
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, RotateCw, User } from "lucide-react";
@@ -100,20 +99,20 @@ export default function Users() {
     },
   ];
 
-  if (isLoading || isRefetching) {
-    return (
-      <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
-        <Card className="w-full max-w-screen-xl">
-          <CardHeader>
-            <Skeleton className="h-8 w-[200px]" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[300px] w-full" />
-          </CardContent>
-        </Card>
-      </Box>
-    );
-  }
+  //   if (isLoading || isRefetching) {
+  //     return (
+  //       <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
+  //         <Card className="w-full max-w-screen-xl">
+  //           <CardHeader>
+  //             <Skeleton className="h-8 w-[200px]" />
+  //           </CardHeader>
+  //           <CardContent>
+  //             <Skeleton className="h-[300px] w-full" />
+  //           </CardContent>
+  //         </Card>
+  //       </Box>
+  //     );
+  //   }
 
   return (
     <Box className="flex flex-col items-center min-h-screen p-6 space-y-4">
@@ -140,6 +139,7 @@ export default function Users() {
             onSearch={search => setSearch(search)}
             totalPages={data?.total_pages}
             currentPage={data?.current_page}
+            isLoading={isLoading || isRefetching}
           />
         </CardContent>
       </Card>

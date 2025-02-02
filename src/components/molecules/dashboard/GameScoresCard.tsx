@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Copy, Edit, Trophy } from "lucide-react";
+import { Copy, Eye, Trophy } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
@@ -74,12 +74,14 @@ export function GameScoresCard({ scores, isLoading }: GameScoresCardProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <Box className="flex items-center gap-2">
-          <Trophy className="w-5 h-5" />
-          <h3 className="font-semibold">NoteBird Scores</h3>
+          {/* <Trophy className="w-5 h-5" /> */}
+          <h3 className="text-lg font-semibold">
+            🏆 NoteBird Scores
+          </h3>
         </Box>
         <Link to="/game-score">
           <Button variant="outline" size="sm">
-            <Edit className="w-4 h-4" />
+            <Eye className="w-4 h-4" />
           </Button>
         </Link>
       </CardHeader>

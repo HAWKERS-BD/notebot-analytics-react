@@ -1,8 +1,9 @@
 import { House, Puzzle, Trophy, Users } from "lucide-react";
 
 export const APP_CONFIG = {
+  secretPassCookie: "secret_pass",
   name: "NoteBot Analytics",
-  logoIcon: "/txb.png",
+  logoIcon: "/icon.png",
   colorPrimary: "#377fcc",
   colorSecondary: "#000000",
   appLink: "https://play.google.com/store/apps/details?id=com.hawkers.notebot",
@@ -13,6 +14,7 @@ export const APP_CONFIG = {
     github: "https://github.com/TriptoAfsin",
     web: "https://www.triptex.me/",
   },
+  secretPass: import.meta.env.VITE_SECRET_PASS,
 };
 
 export const APP_HEADER_MENU = [
